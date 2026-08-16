@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="theme-color" content="#070706" />
+  <title>Skank-E — Private Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="editor.css" />
+</head>
+<body>
+  <div id="public-block" class="public-block" hidden>
+    <div class="blocked-card">
+      <img src="assets/Skank-E_logo.png" alt="Skank-E" />
+      <p class="kicker">PRIVATE LOCAL EDITOR</p>
+      <h1>Editor disabled online.</h1>
+      <p>This editor is deliberately allowed only from a local file or localhost. Download the website and open <strong>editor.html</strong> locally to edit it.</p>
+      <a href="index.html">Back to website</a>
+    </div>
+  </div>
+
+  <div id="editor-app" class="editor-app">
+    <header class="editor-header">
+      <a class="editor-brand" href="index.html" target="_blank" rel="noopener">
+        <img src="assets/Skank-E_logo.png" alt="Skank-E" />
+        <span>PRIVATE EDITOR</span>
+      </a>
+      <div class="header-actions">
+        <span class="privacy-pill">LOCAL ONLY</span>
+        <button class="button button-ghost" id="reset-draft" type="button">Reset draft</button>
+        <button class="button button-primary" id="download-data" type="button">Download site-data.js</button>
+      </div>
+    </header>
+
+    <main class="editor-layout">
+      <div class="controls-pane">
+        <section class="intro-card">
+          <div>
+            <p class="kicker">EDIT → PREVIEW → EXPORT</p>
+            <h1>Edit the site without touching code.</h1>
+          </div>
+          <p>Changes preview instantly and are auto-saved only in this browser. When you're happy, download a new <code>site-data.js</code> and replace the old one in the website folder.</p>
+          <div id="save-status" class="save-status" role="status">Loaded from site-data.js</div>
+        </section>
+
+        <section class="editor-section" aria-labelledby="site-copy-heading">
+          <div class="section-head">
+            <div>
+              <span>01</span>
+              <h2 id="site-copy-heading">Main text</h2>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label class="field field-wide">
+              <span>Hero tagline</span>
+              <input type="text" data-site-field="heroTagline" />
+            </label>
+            <label class="field field-wide">
+              <span>Hero subtitle</span>
+              <textarea rows="2" data-site-field="heroSub"></textarea>
+            </label>
+            <label class="field field-wide">
+              <span>About small line</span>
+              <input type="text" data-site-field="aboutKicker" />
+            </label>
+            <label class="field field-wide">
+              <span>About headline <small>line breaks are kept</small></span>
+              <textarea rows="4" data-site-field="aboutTitle"></textarea>
+            </label>
+            <label class="field field-wide">
+              <span>About paragraph 1</span>
+              <textarea rows="4" data-site-field="aboutParagraph1"></textarea>
+            </label>
+            <label class="field field-wide">
+              <span>About paragraph 2</span>
+              <textarea rows="4" data-site-field="aboutParagraph2"></textarea>
+            </label>
+            <label class="field">
+              <span>Contact eyebrow</span>
+              <input type="text" data-site-field="contactEyebrow" />
+            </label>
+            <label class="field">
+              <span>Contact title</span>
+              <input type="text" data-site-field="contactTitle" />
+            </label>
+            <label class="field field-wide">
+              <span>Contact note</span>
+              <textarea rows="2" data-site-field="contactNote"></textarea>
+            </label>
+            <label class="field field-wide">
+              <span>Footer text</span>
+              <input type="text" data-site-field="footerText" />
+            </label>
+          </div>
+        </section>
+
+        <section class="editor-section" aria-labelledby="releases-heading">
+          <div class="section-head">
+            <div>
+              <span>02</span>
+              <h2 id="releases-heading">Releases</h2>
+            </div>
+            <button class="mini-button" id="add-release" type="button">+ Add release</button>
+          </div>
+          <div id="release-editors" class="item-editors"></div>
+        </section>
+
+        <section class="editor-section" aria-labelledby="players-heading">
+          <div class="section-head">
+            <div>
+              <span>03</span>
+              <h2 id="players-heading">Main players</h2>
+            </div>
+          </div>
+          <p class="section-help">Paste one main SoundCloud, Mixcloud and YouTube URL. The website builds the embeds automatically.</p>
+          <div id="player-editors" class="simple-list"></div>
+        </section>
+
+        <section class="editor-section" aria-labelledby="dub-heading">
+          <div class="section-head">
+            <div>
+              <span>04</span>
+              <h2 id="dub-heading">Dub Lab</h2>
+            </div>
+            <button class="mini-button" id="add-fx" type="button">+ Add effect</button>
+          </div>
+          <p class="section-help">Edit the Dub Lab text, rename the buttons, tune the built-in synth effects, or use your own audio files. For a custom sound, put an MP3/WAV/OGG in <code>assets/sounds/</code> and enter a path such as <code>assets/sounds/my-siren.mp3</code>.</p>
+          <div class="field-grid dub-copy-fields">
+            <label class="field">
+              <span>Small line</span>
+              <input type="text" data-dub-field="eyebrow" />
+            </label>
+            <label class="field">
+              <span>Sound-system label</span>
+              <input type="text" data-dub-field="rigLabel" />
+            </label>
+            <label class="field field-wide">
+              <span>Dub Lab headline <small>line breaks are kept</small></span>
+              <textarea rows="3" data-dub-field="title"></textarea>
+            </label>
+            <label class="field field-wide">
+              <span>Description</span>
+              <textarea rows="3" data-dub-field="description"></textarea>
+            </label>
+            <label class="field field-wide">
+              <span>Ready / armed status</span>
+              <input type="text" data-dub-field="armedStatus" />
+            </label>
+          </div>
+          <div class="dub-editor-divider"><span>FX BUTTONS & SOUNDS</span></div>
+          <div id="fx-editors" class="item-editors"></div>
+        </section>
+
+        <section class="editor-section" aria-labelledby="links-heading">
+          <div class="section-head">
+            <div>
+              <span>05</span>
+              <h2 id="links-heading">Links</h2>
+            </div>
+            <button class="mini-button" id="add-link" type="button">+ Add link</button>
+          </div>
+          <p class="section-help">For booking email, use <code>mailto:name@example.com</code>.</p>
+          <div id="link-editors" class="simple-list"></div>
+        </section>
+
+        <section class="export-card">
+          <p class="kicker">READY TO PUBLISH?</p>
+          <h2>Export the content file.</h2>
+          <p>The editor never modifies the website automatically. It creates a new <code>site-data.js</code>; replace the old one before uploading the site.</p>
+          <div class="export-actions">
+            <button class="button button-primary" id="download-data-bottom" type="button">Download site-data.js</button>
+            <button class="button button-ghost" id="download-backup" type="button">Download JSON backup</button>
+          </div>
+        </section>
+      </div>
+
+      <aside class="preview-pane" aria-label="Live site preview">
+        <div class="preview-toolbar">
+          <div>
+            <span class="live-dot"></span>
+            <strong>LIVE PREVIEW</strong>
+          </div>
+          <button id="refresh-preview" type="button">Refresh</button>
+        </div>
+        <iframe id="site-preview" src="index.html?editor-preview=1" title="Skank-E website preview"></iframe>
+      </aside>
+    </main>
+  </div>
+
+  <template id="release-template">
+    <article class="item-editor release-editor">
+      <div class="item-topline">
+        <strong class="item-title">Release</strong>
+        <div class="item-actions">
+          <button type="button" data-action="move-up" aria-label="Move release up">↑</button>
+          <button type="button" data-action="move-down" aria-label="Move release down">↓</button>
+          <button class="danger" type="button" data-action="remove">Remove</button>
+        </div>
+      </div>
+      <div class="field-grid compact">
+        <label class="field"><span>Number</span><input type="text" data-key="number" /></label>
+        <label class="field"><span>Label</span><input type="text" data-key="label" /></label>
+        <label class="field field-wide"><span>Title</span><input type="text" data-key="title" /></label>
+        <label class="field field-wide"><span>Subtitle</span><textarea rows="2" data-key="subtitle"></textarea></label>
+        <label class="field"><span>Platform</span>
+          <select data-key="type">
+            <option value="soundcloud">SoundCloud</option>
+            <option value="mixcloud">Mixcloud</option>
+            <option value="youtube">YouTube</option>
+          </select>
+        </label>
+        <label class="field"><span>Artwork colour</span>
+          <select data-key="artworkClass">
+            <option value="artwork-a">Green / yellow</option>
+            <option value="artwork-b">Yellow / orange</option>
+            <option value="artwork-c">Orange / red</option>
+          </select>
+        </label>
+        <label class="field field-wide"><span>Release / player URL</span><input type="url" data-key="url" placeholder="https://…" /></label>
+        <label class="field field-wide"><span>Download URL <small>optional</small></span><input type="url" data-key="downloadUrl" placeholder="https://…" /></label>
+      </div>
+    </article>
+  </template>
+
+  <template id="fx-template">
+    <article class="item-editor fx-editor">
+      <div class="item-topline">
+        <strong class="item-title">Dub effect</strong>
+        <div class="item-actions">
+          <button type="button" data-action="move-up" aria-label="Move effect up">↑</button>
+          <button type="button" data-action="move-down" aria-label="Move effect down">↓</button>
+          <button class="danger" type="button" data-action="remove">Remove</button>
+        </div>
+      </div>
+      <div class="field-grid compact">
+        <label class="field"><span>Button name</span><input type="text" data-key="label" /></label>
+        <label class="field"><span>Small button text</span><input type="text" data-key="sublabel" /></label>
+        <label class="field"><span>Sound source</span>
+          <select data-key="source">
+            <option value="generated">Built-in synth</option>
+            <option value="audio">Custom audio file / URL</option>
+          </select>
+        </label>
+        <label class="field generated-only"><span>Built-in effect</span>
+          <select data-key="engine">
+            <option value="siren">Siren sweep</option>
+            <option value="echo">Echo chop</option>
+            <option value="spring">Spring boing</option>
+          </select>
+        </label>
+        <label class="field field-wide audio-only">
+          <span>Audio path / URL <small>MP3, WAV or OGG</small></span>
+          <input type="text" data-key="audioUrl" placeholder="assets/sounds/my-siren.mp3" />
+        </label>
+        <div class="field-wide sound-settings generated-only" data-settings></div>
+        <div class="field-wide audio-settings audio-only">
+          <div class="field-grid compact">
+            <label class="field"><span>Volume <small>0–1</small></span><input type="number" min="0" max="1" step="0.01" data-param="audioVolume" /></label>
+            <label class="field"><span>Playback speed</span><input type="number" min="0.25" max="4" step="0.05" data-param="playbackRate" /></label>
+          </div>
+        </div>
+      </div>
+      <p class="fx-editor-note">Use the live preview on the right to hear your changes. Audio only starts after you click an FX button.</p>
+    </article>
+  </template>
+
+  <script src="site-data.js"></script>
+  <script src="editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+SKANK-E PRIVATE EDITOR — QUICK GUIDE
+====================================
+
+OPEN IT
+- Double-click editor.html, OR
+- In this folder run: python -m http.server 8000
+  then visit http://localhost:8000/editor.html
+
+EDIT
+- Main site text
+- Releases (add / remove / reorder)
+- SoundCloud / Mixcloud / YouTube player URLs
+- Dub Lab text, button names and FX order
+- Dub Lab built-in sound parameters (siren / echo / spring)
+- Dub Lab custom MP3 / WAV / OGG sounds
+- Social / booking links
+
+DUB LAB — BUILT-IN SOUNDS
+Each FX button can use one of three browser-generated engines:
+- Siren sweep: waveform, start/peak/end pitch, timing, filter and volume
+- Echo chop: noise burst, filter, delay, feedback and volume
+- Spring boing: base pitch, spread, decay, number of taps and volume
+
+DUB LAB — YOUR OWN AUDIO
+1. Put an MP3, WAV or OGG file inside assets/sounds/.
+2. In the Dub Lab editor, change “Sound source” to “Custom audio file / URL”.
+3. Enter a relative path such as: assets/sounds/my-siren.mp3
+4. Adjust volume and playback speed if you want.
+5. Test it by clicking the FX button in the live preview.
+
+You can also use an https:// URL that points directly to an audio file.
+
+PREVIEW
+- The right-hand panel updates while you type.
+- Your work is auto-saved as a private browser draft.
+- Dub Lab buttons in the preview use the current draft settings.
+
+PUBLISH
+1. Click “Download site-data.js”.
+2. Put that downloaded file in the website folder.
+3. Replace the old site-data.js.
+4. If you added custom audio files, keep them in assets/sounds/ when uploading.
+5. Refresh index.html.
+6. Upload/publish the site as usual.
+
+PRIVACY
+- editor.html is not linked anywhere on the public site.
+- The editor disables itself on normal public web hosts.
+- It is intended for file:// and localhost only.
+- A real online private CMS would require authentication and a backend.
