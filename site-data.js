@@ -32,7 +32,7 @@ window.SKANK_E_DATA = {
       "url": "",
       "downloadUrl": "",
       "artworkClass": "artwork-b",
-      "label": "BOOTLEG"
+      "label": "MIX"
     },
     {
       "number": "003",
@@ -49,7 +49,7 @@ window.SKANK_E_DATA = {
     {
       "type": "soundcloud",
       "label": "SOUNDCLOUD",
-      "url": ""
+      "url": "https://soundcloud.com/skank-e"
     },
     {
       "type": "mixcloud",
@@ -65,7 +65,7 @@ window.SKANK_E_DATA = {
   "dubLab": {
     "eyebrow": "LIVE FX / NO AUTOPLAY",
     "title": "Make some\nnoise.",
-    "description": "Tap the controls for a little sound-system theatre. Use the built-in synth sounds or point any button at your own MP3, WAV or OGG file.",
+    "description": "Tap the controls for a little sound-system theatre. ",
     "armedStatus": "FX armed. Click a button to fire.",
     "rigLabel": "SKANK-E MOBILE SOUND",
     "effects": [
