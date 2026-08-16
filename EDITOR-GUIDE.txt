@@ -48,3 +48,7 @@ PRIVACY
 - The editor disables itself on normal public web hosts.
 - It is intended for file:// and localhost only.
 - A real online private CMS would require authentication and a backend.
+
+TIKTOK
+------
+A TikTok row is included in Links by default. Paste the full profile URL, e.g. https://www.tiktok.com/@username.

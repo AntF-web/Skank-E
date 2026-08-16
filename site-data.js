@@ -122,6 +122,7 @@ window.SKANK_E_DATA = {
     { label: "Mixcloud", url: "" },
     { label: "YouTube", url: "" },
     { label: "Instagram", url: "" },
+    { label: "TikTok", url: "" },
     { label: "Booking email", url: "" }
   ]
 };

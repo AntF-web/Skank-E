@@ -9,9 +9,12 @@
     return;
   }
 
-  const DRAFT_KEY = 'skank-e-private-editor-draft-v1';
+  const DRAFT_KEY = 'skank-e-private-editor-draft-v2';
+  const LEGACY_DRAFT_KEY = 'skank-e-private-editor-draft-v1';
   const baseData = structuredClone(window.SKANK_E_DATA || { site: {}, releases: [], players: [], dubLab: {}, links: [] });
-  let state = loadDraft() || structuredClone(baseData);
+  const loadedDraft = loadDraft();
+  let state = loadedDraft?.data || structuredClone(baseData);
+  const migrateTikTokLink = Boolean(loadedDraft?.legacy);
   let saveTimer;
   let previewTimer;
 
@@ -29,15 +32,18 @@
   }
 
   function loadDraft() {
-    try {
-      const raw = localStorage.getItem(DRAFT_KEY);
-      if (!raw) return null;
-      const parsed = JSON.parse(raw);
-      if (!parsed || typeof parsed !== 'object') return null;
-      return parsed;
-    } catch {
-      return null;
+    for (const [key, legacy] of [[DRAFT_KEY, false], [LEGACY_DRAFT_KEY, true]]) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') continue;
+        return { data: parsed, legacy };
+      } catch {
+        // Try the next draft key.
+      }
     }
+    return null;
   }
 
   function effectParamDefaults(engine) {
@@ -88,6 +94,15 @@
   }
 
   state = normalizeState(state);
+
+  // One-time migration from the previous editor draft: preserve the user's
+  // existing edits while inserting the newly added TikTok link.
+  if (migrateTikTokLink && !state.links.some(link => String(link.label || '').toLowerCase() === 'tiktok')) {
+    const bookingIndex = state.links.findIndex(link => /booking/i.test(String(link.label || '')));
+    const insertAt = bookingIndex >= 0 ? bookingIndex : state.links.length;
+    state.links.splice(insertAt, 0, { label: 'TikTok', url: '' });
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(state)); } catch {}
+  }
 
   function setStatus(message, saved = false) {
     status.textContent = message;
@@ -421,6 +436,7 @@
   document.getElementById('reset-draft').addEventListener('click', () => {
     if (!confirm('Reset the editor draft to the current site-data.js file?')) return;
     localStorage.removeItem(DRAFT_KEY);
+    localStorage.removeItem(LEGACY_DRAFT_KEY);
     location.reload();
   });
 
