@@ -1,17 +1,13 @@
 (() => {
   const isLocal = location.protocol === 'file:' || ['localhost', '127.0.0.1', '::1'].includes(location.hostname);
-  const publicBlock = document.getElementById('public-block');
-  const editorApp = document.getElementById('editor-app');
+  const isGitHubPages = /\.github\.io$/i.test(location.hostname);
 
-  if (!isLocal) {
-    publicBlock.hidden = false;
-    editorApp.hidden = true;
-    return;
-  }
-
-  const DRAFT_KEY = 'skank-e-private-editor-draft-v1';
+  const DRAFT_KEY = 'skank-e-private-editor-draft-v2';
+  const LEGACY_DRAFT_KEY = 'skank-e-private-editor-draft-v1';
   const baseData = structuredClone(window.SKANK_E_DATA || { site: {}, releases: [], players: [], dubLab: {}, links: [] });
-  let state = loadDraft() || structuredClone(baseData);
+  const loadedDraft = loadDraft();
+  let state = loadedDraft?.data || structuredClone(baseData);
+  const migrateTikTokLink = Boolean(loadedDraft?.legacy);
   let saveTimer;
   let previewTimer;
 
@@ -21,6 +17,16 @@
   const fxContainer = document.getElementById('fx-editors');
   const linkContainer = document.getElementById('link-editors');
   const preview = document.getElementById('site-preview');
+  const githubStatus = document.getElementById('github-status');
+  const githubPublishButton = document.getElementById('github-publish');
+  const githubFields = {
+    owner: document.getElementById('github-owner'),
+    repo: document.getElementById('github-repo'),
+    branch: document.getElementById('github-branch'),
+    path: document.getElementById('github-path'),
+    token: document.getElementById('github-token')
+  };
+  const GITHUB_CONFIG_KEY = 'skank-e-github-publish-config-v1';
   const releaseTemplate = document.getElementById('release-template');
   const fxTemplate = document.getElementById('fx-template');
 
@@ -29,15 +35,18 @@
   }
 
   function loadDraft() {
-    try {
-      const raw = localStorage.getItem(DRAFT_KEY);
-      if (!raw) return null;
-      const parsed = JSON.parse(raw);
-      if (!parsed || typeof parsed !== 'object') return null;
-      return parsed;
-    } catch {
-      return null;
+    for (const [key, legacy] of [[DRAFT_KEY, false], [LEGACY_DRAFT_KEY, true]]) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') continue;
+        return { data: parsed, legacy };
+      } catch {
+        // Try the next draft key.
+      }
     }
+    return null;
   }
 
   function effectParamDefaults(engine) {
@@ -88,6 +97,173 @@
   }
 
   state = normalizeState(state);
+
+  // One-time migration from the previous editor draft: preserve the user's
+  // existing edits while inserting the newly added TikTok link.
+  if (migrateTikTokLink && !state.links.some(link => String(link.label || '').toLowerCase() === 'tiktok')) {
+    const bookingIndex = state.links.findIndex(link => /booking/i.test(String(link.label || '')));
+    const insertAt = bookingIndex >= 0 ? bookingIndex : state.links.length;
+    state.links.splice(insertAt, 0, { label: 'TikTok', url: '' });
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(state)); } catch {}
+  }
+
+  function inferGitHubConfig() {
+    const host = location.hostname.toLowerCase();
+    const parts = location.pathname.split('/').filter(Boolean).map(part => decodeURIComponent(part));
+    const defaults = { owner: '', repo: '', branch: 'main', path: 'site-data.js' };
+
+    if (!host.endsWith('.github.io')) return defaults;
+
+    const owner = host.slice(0, -'.github.io'.length);
+    let repo;
+    let offset = 0;
+    const first = (parts[0] || '').toLowerCase();
+    const firstLooksLikeFile = /\.html?$/.test(first);
+
+    if (parts.length && !firstLooksLikeFile) {
+      repo = parts[0];
+      offset = 1;
+    } else {
+      repo = `${owner}.github.io`;
+    }
+
+    const insideRepo = parts.slice(offset);
+    if (insideRepo.length && /\.html?$/.test(insideRepo.at(-1))) insideRepo.pop();
+    const path = [...insideRepo, 'site-data.js'].join('/') || 'site-data.js';
+    return { owner, repo, branch: 'main', path };
+  }
+
+  function loadGitHubConfig() {
+    const inferred = inferGitHubConfig();
+    try {
+      const saved = JSON.parse(localStorage.getItem(GITHUB_CONFIG_KEY) || '{}');
+      return {
+        owner: saved.owner || inferred.owner,
+        repo: saved.repo || inferred.repo,
+        branch: saved.branch || inferred.branch,
+        path: saved.path || inferred.path
+      };
+    } catch {
+      return inferred;
+    }
+  }
+
+  function applyGitHubConfig(config) {
+    githubFields.owner.value = config.owner || '';
+    githubFields.repo.value = config.repo || '';
+    githubFields.branch.value = config.branch || 'main';
+    githubFields.path.value = config.path || 'site-data.js';
+  }
+
+  function saveGitHubConfig() {
+    // Deliberately exclude the token. It should never persist in browser storage.
+    const config = {
+      owner: githubFields.owner.value.trim(),
+      repo: githubFields.repo.value.trim(),
+      branch: githubFields.branch.value.trim() || 'main',
+      path: githubFields.path.value.trim() || 'site-data.js'
+    };
+    try { localStorage.setItem(GITHUB_CONFIG_KEY, JSON.stringify(config)); } catch {}
+    return config;
+  }
+
+  function setGitHubStatus(message, tone = '') {
+    githubStatus.textContent = message;
+    githubStatus.classList.toggle('success', tone === 'success');
+    githubStatus.classList.toggle('error', tone === 'error');
+    githubStatus.classList.toggle('working', tone === 'working');
+  }
+
+  function encodedRepoPath(path) {
+    return path.split('/').filter(Boolean).map(encodeURIComponent).join('/');
+  }
+
+  function siteDataText() {
+    const header = `/* Generated by Skank-E private editor. */\n\nwindow.SKANK_E_DATA = `;
+    return `${header}${JSON.stringify(state, null, 2)};\n`;
+  }
+
+  function utf8ToBase64(text) {
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
+    const chunkSize = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    }
+    return btoa(binary);
+  }
+
+  async function githubJson(url, options = {}) {
+    const response = await fetch(url, options);
+    let payload = null;
+    try { payload = await response.json(); } catch {}
+    if (!response.ok) {
+      const error = new Error(payload?.message || `GitHub returned HTTP ${response.status}`);
+      error.status = response.status;
+      error.payload = payload;
+      throw error;
+    }
+    return payload;
+  }
+
+  async function publishToGitHub() {
+    const config = saveGitHubConfig();
+    const token = githubFields.token.value.trim();
+    const missing = [];
+    if (!config.owner) missing.push('owner');
+    if (!config.repo) missing.push('repository');
+    if (!config.branch) missing.push('branch');
+    if (!config.path) missing.push('file path');
+    if (!token) missing.push('token');
+    if (missing.length) {
+      setGitHubStatus(`Missing: ${missing.join(', ')}.`, 'error');
+      return;
+    }
+
+    if (!confirm(`Publish the current editor draft to ${config.owner}/${config.repo} on branch ${config.branch}?`)) return;
+
+    const endpoint = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${encodedRepoPath(config.path)}`;
+    const headers = {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${token}`,
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+
+    githubPublishButton.disabled = true;
+    githubPublishButton.textContent = 'Publishing…';
+    setGitHubStatus('Checking the current site-data.js on GitHub…', 'working');
+
+    try {
+      const current = await githubJson(`${endpoint}?ref=${encodeURIComponent(config.branch)}`, { headers });
+      if (!current?.sha) throw new Error('GitHub did not return the current file SHA. Check the content file path.');
+
+      setGitHubStatus('Committing the new site-data.js…', 'working');
+      const result = await githubJson(endpoint, {
+        method: 'PUT',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Update Skank-E website content',
+          content: utf8ToBase64(siteDataText()),
+          sha: current.sha,
+          branch: config.branch
+        })
+      });
+
+      const shortSha = result?.commit?.sha ? result.commit.sha.slice(0, 7) : '';
+      setGitHubStatus(`Published${shortSha ? ` as commit ${shortSha}` : ''}. GitHub Pages may need a short moment to redeploy; then refresh the public site.`, 'success');
+      setStatus('Published to GitHub — browser draft kept as backup', true);
+    } catch (error) {
+      let advice = '';
+      if (error.status === 401) advice = ' The token is invalid or expired.';
+      else if (error.status === 403) advice = ' The token probably lacks Contents: Read and write permission for this repository.';
+      else if (error.status === 404) advice = ' Check owner, repository, branch and file path, and make sure the token can access that repository.';
+      else if (error.status === 422) advice = ' GitHub rejected the commit. Check the branch and file path.';
+      setGitHubStatus(`${error.message || 'Could not publish.'}${advice}`, 'error');
+    } finally {
+      githubPublishButton.disabled = false;
+      githubPublishButton.textContent = 'Publish changes to GitHub';
+    }
+  }
 
   function setStatus(message, saved = false) {
     status.textContent = message;
@@ -421,6 +597,7 @@
   document.getElementById('reset-draft').addEventListener('click', () => {
     if (!confirm('Reset the editor draft to the current site-data.js file?')) return;
     localStorage.removeItem(DRAFT_KEY);
+    localStorage.removeItem(LEGACY_DRAFT_KEY);
     location.reload();
   });
 
@@ -431,6 +608,26 @@
     preview.src = `index.html?editor-preview=1&t=${Date.now()}`;
   });
   preview.addEventListener('load', () => setTimeout(sendPreview, 80));
+
+  const initialGitHubConfig = loadGitHubConfig();
+  applyGitHubConfig(initialGitHubConfig);
+  Object.values(githubFields).forEach(field => {
+    if (field === githubFields.token) return;
+    field.addEventListener('change', saveGitHubConfig);
+  });
+  document.getElementById('github-detect').addEventListener('click', () => {
+    const detected = inferGitHubConfig();
+    applyGitHubConfig(detected);
+    saveGitHubConfig();
+    if (detected.owner && detected.repo) {
+      setGitHubStatus(`Detected ${detected.owner}/${detected.repo}. Check the branch before publishing.`, 'success');
+    } else {
+      setGitHubStatus('This is not a standard github.io URL, so enter the repository details manually.', 'error');
+    }
+  });
+  githubPublishButton.addEventListener('click', publishToGitHub);
+  const modePill = document.getElementById('editor-mode-pill');
+  if (modePill) modePill.textContent = isLocal ? 'LOCAL DRAFT' : (isGitHubPages ? 'GITHUB PAGES' : 'BROWSER DRAFT');
 
   fillSiteFields();
   fillDubLabFields();

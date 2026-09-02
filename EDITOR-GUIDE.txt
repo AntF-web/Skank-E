@@ -1,50 +1,75 @@
-SKANK-E PRIVATE EDITOR — QUICK GUIDE
-====================================
+SKANK-E EDITOR — GITHUB PAGES + LOCAL GUIDE
+=============================================
 
-OPEN IT
-- Double-click editor.html, OR
-- In this folder run: python -m http.server 8000
-  then visit http://localhost:8000/editor.html
+WHY THE OLD GITHUB VERSION DID NOT UPDATE
+-----------------------------------------
+The previous editor was intentionally local-only. On a normal public host it
+stopped itself, and even locally it only downloaded a new site-data.js file.
+A static GitHub Pages website cannot write to its own repository by itself.
 
-EDIT
+This version fixes that by adding an optional “Publish to GitHub” action.
+
+EDIT ONLINE ON GITHUB PAGES
+---------------------------
+1. Open yoursite.github.io/.../editor.html
+2. Edit the site. The preview updates immediately.
+3. Scroll to “Publish to GitHub”.
+4. Check Owner, Repository, Branch and Content file path.
+   - Normal github.io URLs are auto-detected.
+   - The usual branch is main, but use the branch that actually publishes your site.
+5. Paste a FINE-GRAINED GitHub personal access token.
+6. Click “Publish changes to GitHub”.
+7. GitHub Pages may need a short moment to redeploy. Refresh the public site.
+
+TOKEN PERMISSIONS
+-----------------
+Create a fine-grained token limited to ONLY the website repository and give it:
+- Repository permissions → Contents: Read and write
+
+Do not put the token into editor.js, site-data.js, HTML, a Git commit, or any
+public repository file. This editor keeps the token only in memory for the
+current browser tab and never stores it in localStorage.
+
+IMPORTANT PRIVACY NOTE
+----------------------
+GitHub Pages is static hosting. If editor.html is deployed there, the editor
+interface itself is not truly private: anyone who knows the URL can open it.
+However, opening the editor does NOT give someone permission to publish. A
+valid GitHub token with repository access is still required.
+
+For a truly private online CMS, use an authenticated backend/service. For this
+simple static site, the scoped-token method keeps publishing permission under
+your control without adding a backend.
+
+LOCAL EDITING
+-------------
+You can still double-click editor.html, or run:
+  python -m http.server 8000
+then visit:
+  http://localhost:8000/editor.html
+
+Local edits auto-save to this browser. You can download site-data.js and commit
+it manually if you prefer not to use the GitHub API.
+
+WHAT THE EDITOR CONTROLS
+------------------------
 - Main site text
 - Releases (add / remove / reorder)
-- SoundCloud / Mixcloud / YouTube player URLs
-- Dub Lab text, button names and FX order
-- Dub Lab built-in sound parameters (siren / echo / spring)
-- Dub Lab custom MP3 / WAV / OGG sounds
-- Social / booking links
+- SoundCloud / Mixcloud / YouTube URLs
+- Dub Lab text and FX order
+- Built-in Dub Lab sound parameters
+- Custom Dub Lab MP3 / WAV / OGG paths
+- Social links, including TikTok
+- Booking email
 
-DUB LAB — BUILT-IN SOUNDS
-Each FX button can use one of three browser-generated engines:
-- Siren sweep: waveform, start/peak/end pitch, timing, filter and volume
-- Echo chop: noise burst, filter, delay, feedback and volume
-- Spring boing: base pitch, spread, decay, number of taps and volume
+CUSTOM DUB LAB AUDIO
+--------------------
+The editor can point at an uploaded audio file, but it does not currently upload
+that binary file through GitHub. Put custom files in assets/sounds/ in the repo,
+then use a path such as:
+  assets/sounds/my-siren.mp3
 
-DUB LAB — YOUR OWN AUDIO
-1. Put an MP3, WAV or OGG file inside assets/sounds/.
-2. In the Dub Lab editor, change “Sound source” to “Custom audio file / URL”.
-3. Enter a relative path such as: assets/sounds/my-siren.mp3
-4. Adjust volume and playback speed if you want.
-5. Test it by clicking the FX button in the live preview.
-
-You can also use an https:// URL that points directly to an audio file.
-
-PREVIEW
-- The right-hand panel updates while you type.
-- Your work is auto-saved as a private browser draft.
-- Dub Lab buttons in the preview use the current draft settings.
-
-PUBLISH
-1. Click “Download site-data.js”.
-2. Put that downloaded file in the website folder.
-3. Replace the old site-data.js.
-4. If you added custom audio files, keep them in assets/sounds/ when uploading.
-5. Refresh index.html.
-6. Upload/publish the site as usual.
-
-PRIVACY
-- editor.html is not linked anywhere on the public site.
-- The editor disables itself on normal public web hosts.
-- It is intended for file:// and localhost only.
-- A real online private CMS would require authentication and a backend.
+BACKUP
+------
+Use “Download site-data.js” or “Download JSON backup” whenever you want a local
+copy of the current editor state.

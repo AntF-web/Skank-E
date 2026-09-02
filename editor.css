@@ -264,3 +264,36 @@ code { color: var(--yellow); }
 }
 .fx-editor .audio-only[hidden],
 .fx-editor .generated-only[hidden] { display: none !important; }
+
+
+/* GitHub Pages publishing -------------------------------------- */
+.github-publish-card {
+  background: linear-gradient(145deg, rgba(99,168,60,.09), rgba(244,197,45,.035), rgba(255,255,255,.015));
+}
+.github-security-note {
+  margin: 0 0 18px;
+  padding: 13px 14px;
+  border: 1px solid rgba(244,197,45,.22);
+  border-radius: 11px;
+  background: rgba(244,197,45,.055);
+  color: #cfc6ae;
+  font-size: .78rem;
+  line-height: 1.55;
+}
+.github-security-note strong { color: var(--yellow); }
+.github-fields { margin-top: 16px; }
+.github-actions { margin-top: 16px; }
+.github-status {
+  margin-top: 14px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(0,0,0,.28);
+  color: var(--muted);
+  font-size: .75rem;
+  line-height: 1.45;
+}
+.github-status.success { border-color: rgba(99,168,60,.42); color: #b7dd99; }
+.github-status.error { border-color: rgba(228,75,46,.48); color: #ffad9d; }
+.github-status.working { border-color: rgba(244,197,45,.38); color: #f4d978; }
+#github-publish:disabled { opacity: .55; cursor: wait; transform: none; }
