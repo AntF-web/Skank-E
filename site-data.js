@@ -36,13 +36,13 @@ window.SKANK_E_DATA = {
     },
     {
       "number": "003",
-      "title": "ADD YOUR VIDEO CUT",
-      "subtitle": "Old-school samples × dubwise video pressure",
-      "type": "youtube",
-      "url": "",
+      "title": "GENIUS OF BREATH",
+      "subtitle": "Tom Tom Club vs Q-Tip",
+      "type": "soundcloud",
+      "url": "https://soundcloud.com/skank-e/genius-of-breath",
       "downloadUrl": "",
       "artworkClass": "artwork-c",
-      "label": "VIDEO"
+      "label": "MASHUP"
     }
   ],
   "players": [
