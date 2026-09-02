@@ -80,8 +80,8 @@ window.SKANK_E_DATA = {
           "startFrequency": 440,
           "peakFrequency": 880,
           "endFrequency": 520,
-          "peakTime": 0.45,
-          "duration": 1.05,
+          "peakTime": 3.45,
+          "duration": 5,
           "filterFrequency": 2200,
           "volume": 0.12,
           "audioVolume": 0.8,
@@ -98,7 +98,7 @@ window.SKANK_E_DATA = {
           "burstDuration": 0.09,
           "filterFrequency": 850,
           "delayTime": 0.22,
-          "feedback": 0.48,
+          "feedback": 1,
           "volume": 0.18,
           "audioVolume": 0.8,
           "playbackRate": 1
@@ -114,7 +114,7 @@ window.SKANK_E_DATA = {
           "baseFrequency": 130,
           "frequencySpread": 57,
           "decay": 0.24,
-          "taps": 4,
+          "taps": 7,
           "volume": 0.05,
           "audioVolume": 0.8,
           "playbackRate": 1
