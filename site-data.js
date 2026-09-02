@@ -39,7 +39,7 @@ window.SKANK_E_DATA = {
       "label": "MASHUP"
     },
     {
-      "artworkMode": "auto",
+      "artworkMode": "custom",
       "artworkUrl": "assets\\artwork\\Q-Tip_TomTomClub.jpg",
       "number": "003",
       "title": "GENIUS OF BREATH",
