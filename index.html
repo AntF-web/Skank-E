@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="description" content="Skank-E — mashups, bootlegs and sound-system pressure: reggae, funk, hip-hop, dub and breaks." />
+  <title>Skank-E — Mashups, Bootlegs & Sound-System Pressure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Skank-E home">
+      <img src="assets/Skank-E_logo.png" alt="Skank-E logo" decoding="async" />
+    </a>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span>
+      <span class="sr-only">Toggle menu</span>
+    </button>
+
+    <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#releases">Releases</a>
+      <a href="#players">Players</a>
+      <a href="#dub-lab">Dub lab</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-backdrop" aria-hidden="true">
+        <div class="sunburst"></div>
+        <div class="poster-lines"></div>
+        <div class="cable cable-a"></div>
+        <div class="cable cable-b"></div>
+      </div>
+
+      <div class="speaker-stack speaker-stack-left" aria-hidden="true">
+        <div class="speaker-badge">L</div>
+        <div class="horn"></div>
+        <div class="cone cone-mid"></div>
+        <div class="cone cone-low"></div>
+        <div class="port"></div>
+      </div>
+
+      <div class="speaker-stack speaker-stack-right" aria-hidden="true">
+        <div class="speaker-badge">R</div>
+        <div class="horn"></div>
+        <div class="cone cone-mid"></div>
+        <div class="cone cone-low"></div>
+        <div class="port"></div>
+      </div>
+
+      <div class="hero-copy">
+        <div class="tape-label">BOOTLEG SERVICE · DUBWISE MASHUPS · 45 RPM ATTITUDE</div>
+        <img class="hero-logo" src="assets/Skank-E_logo.png" alt="Skank-E" fetchpriority="high" decoding="async" />
+        <p class="hero-tagline" id="hero-tagline">Reggae roots × funk breaks × hip-hop acapellas</p>
+        <p class="hero-sub" id="hero-sub">Old-school cut-and-paste energy, built for big speakers.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#players">Play the tunes</a>
+          <a class="btn btn-ghost" href="#releases">Dig the crates</a>
+        </div>
+      </div>
+
+      <div class="hero-stamp" aria-hidden="true">
+        <span>SKANK-E</span>
+        <small>SOUND SYSTEM</small>
+      </div>
+
+      <div class="ticker" aria-label="Styles">
+        <div class="ticker-track">
+          <span>REGGAE</span><span>FUNK</span><span>HIP-HOP</span><span>DUB</span><span>BREAKS</span><span>DANCEHALL</span><span>BOOTLEGS</span><span>MASHUPS</span>
+          <span>REGGAE</span><span>FUNK</span><span>HIP-HOP</span><span>DUB</span><span>BREAKS</span><span>DANCEHALL</span><span>BOOTLEGS</span><span>MASHUPS</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section about-section">
+      <div class="section-label">01 / WHO DAT?</div>
+      <div class="about-grid">
+        <div class="about-title-wrap">
+          <p class="stamp-note" id="about-kicker">HEAVYWEIGHT BLENDS SINCE WHENEVER THE PARTY STARTED</p>
+          <h1 id="about-title">Sound-system<br>pressure with<br>funk in the trunk.</h1>
+        </div>
+        <div class="about-copy">
+          <p id="about-p1"><strong>Skank-E</strong> is a mashup / bootleg DJ project blending reggae, dub, funk, hip-hop and breakbeat culture into bass-heavy edits made for parties rather than playlists.</p>
+          <p id="about-p2">The formula is simple: familiar voices, rude basslines, dusty drums, dub sirens and enough swing to keep the floor moving.</p>
+          <div class="selector-tags" aria-label="Styles">
+            <span>ROOTS</span><span>DUB</span><span>FUNK 45s</span><span>BOOM BAP</span><span>BREAKS</span><span>DANCEHALL</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="releases" class="section releases-section">
+      <div class="section-label">02 / DUBPLATES & BOOTLEGS</div>
+      <div class="section-heading-row">
+        <div>
+          <p class="eyebrow">FRESH CUTS / SECRET WEAPONS</p>
+          <h2>Releases</h2>
+        </div>
+        <p class="mini-note">The artwork and player system are ready. Add the real Skank-E release links in <code>site-data.js</code> and the cards update automatically.</p>
+      </div>
+      <div id="release-grid" class="release-grid" aria-live="polite"></div>
+    </section>
+
+    <section id="players" class="section players-section">
+      <div class="section-label">03 / SELECT A CHANNEL</div>
+      <div class="section-heading-row">
+        <div>
+          <p class="eyebrow">REAL EMBED PLAYERS</p>
+          <h2>Listen</h2>
+        </div>
+        <p class="mini-note">SoundCloud, Mixcloud and YouTube embeds are generated from the URLs in <code>site-data.js</code>. No iframe editing needed.</p>
+      </div>
+
+      <div id="player-grid" class="player-grid"></div>
+    </section>
+
+    <section id="dub-lab" class="section dub-lab-section">
+      <div class="section-label">04 / DUB LAB</div>
+      <div class="dub-grid">
+        <div class="dub-copy">
+          <p class="eyebrow" id="dub-eyebrow">LIVE FX / NO AUTOPLAY</p>
+          <h2 id="dub-title">Make some<br>noise.</h2>
+          <p id="dub-description">Tap the controls for a little sound-system theatre.</p>
+          <div class="fx-controls" id="fx-controls" role="group" aria-label="Dub effects"></div>
+          <p class="fx-status" id="fx-status">FX armed. Click a button to fire.</p>
+        </div>
+
+        <div class="sound-system-rig" aria-hidden="true">
+          <div class="rig-label" id="rig-label">SKANK-E MOBILE SOUND</div>
+          <div class="rig-row rig-horns"><i></i><i></i><i></i></div>
+          <div class="rig-row rig-mids"><i></i><i></i></div>
+          <div class="rig-row rig-bass"><i></i><i></i></div>
+          <div class="rig-meter"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section flyer-section" aria-label="Skank-E visual poster">
+      <div class="flyer-copy">
+        <p class="eyebrow">ONE DECK / TWO WORLDS / ZERO GENRE POLICE</p>
+        <h2>Mash it.<br>Skank it.<br>Run it.</h2>
+      </div>
+      <div class="giant-45" aria-hidden="true">
+        <div class="giant-45-label">SKANK-E<br><small>DUBPLATE</small></div>
+      </div>
+      <div class="flyer-stickers" aria-hidden="true">
+        <span class="sticker sticker-a">BASS<br>WEIGHT</span>
+        <span class="sticker sticker-b">FREE<br>THE<br>BOOTLEG</span>
+        <span class="sticker sticker-c">45<br>RPM</span>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact-section">
+      <div class="section-label">05 / LINKS</div>
+      <div class="contact-grid">
+        <div>
+          <p class="eyebrow" id="contact-eyebrow">BOOKINGS / DOWNLOADS / SOCIALS</p>
+          <h2 id="contact-title">Turn it up.</h2>
+          <p class="contact-note" id="contact-note">Hit the links for music, downloads, socials and bookings.</p>
+        </div>
+        <div id="link-stack" class="link-stack"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <img src="assets/Skank-E_logo.png" alt="" aria-hidden="true" />
+    <p>© <span id="year"></span> <span id="footer-text">SKANK-E · MASH IT UP · PLAY IT LOUD</span></p>
+  </footer>
+
+  <script src="site-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
