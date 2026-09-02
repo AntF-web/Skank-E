@@ -144,9 +144,9 @@ function artworkClass(value) {
   return ['artwork-a', 'artwork-b', 'artwork-c'].includes(value) ? value : 'artwork-a';
 }
 
-function makeArtwork(release) {
+function makeArtwork(release, index) {
   return `
-    <div class="release-art ${artworkClass(release.artworkClass)}">
+    <div class="release-art ${artworkClass(release.artworkClass)}" data-release-artwork="${index}">
       <div class="art-no">${escapeHTML(release.number || '000')}</div>
       <div class="art-logo"><img src="assets/Skank-E_logo.png" alt=""></div>
       <div class="art-label">${escapeHTML(release.label || 'DUBPLATE')}</div>
@@ -154,12 +154,122 @@ function makeArtwork(release) {
     </div>`;
 }
 
+// Release artwork is an enhancement only. The cards are rendered first with
+// the original Skank-E artwork, then platform/custom artwork is attempted in
+// the background. Any network, API, CORS or image error simply leaves the
+// original artwork in place, so a failed artwork lookup can never blank a
+// release or another section of the page.
+const releaseArtworkCache = new Map();
+let releaseArtworkRenderVersion = 0;
+
+function safeImageUrl(value = '') {
+  let url = String(value).trim();
+  if (!url) return '';
+  if (/^(javascript:|data:|vbscript:)/i.test(url)) return '';
+  if (/^[a-z][a-z0-9+.-]*:/i.test(url) && !/^https?:/i.test(url)) return '';
+  if (/^http:/i.test(url)) url = url.replace(/^http:/i, 'https:');
+  return url;
+}
+
+function withFetchTimeout(url, milliseconds = 4500) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), milliseconds);
+  return fetch(url, { signal: controller.signal, mode: 'cors', cache: 'force-cache' })
+    .then(response => response.ok ? response.json() : null)
+    .catch(() => null)
+    .finally(() => clearTimeout(timer));
+}
+
+function highResSoundCloudArtwork(url = '') {
+  const clean = safeImageUrl(url);
+  if (!clean) return '';
+  // SoundCloud commonly returns a small "-large" image. Requesting the
+  // t500x500 variant gives release cards a sharper square image when present.
+  return clean.replace(/-large(\.[a-z0-9]+)(?:\?.*)?$/i, '-t500x500$1');
+}
+
+async function automaticArtworkUrl(release) {
+  const type = String(release?.type || '').toLowerCase();
+  const releaseUrl = safeUrl(release?.url);
+  if (!releaseUrl || !/^https?:/i.test(releaseUrl)) return '';
+
+  const key = `${type}:${releaseUrl}`;
+  if (releaseArtworkCache.has(key)) return releaseArtworkCache.get(key);
+
+  let result = '';
+  try {
+    if (type === 'youtube') {
+      const id = youtubeId(releaseUrl);
+      if (id) result = `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`;
+    } else if (type === 'soundcloud') {
+      const endpoint = `https://soundcloud.com/oembed?format=json&url=${encodeURIComponent(releaseUrl)}`;
+      const payload = await withFetchTimeout(endpoint);
+      result = highResSoundCloudArtwork(payload?.thumbnail_url || '');
+    } else if (type === 'mixcloud') {
+      const path = mixcloudPath(releaseUrl);
+      if (path) {
+        const payload = await withFetchTimeout(`https://api.mixcloud.com${path}`);
+        result = safeImageUrl(payload?.pictures?.extra_large || payload?.pictures?.large || payload?.pictures?.medium || payload?.picture || '');
+      }
+    }
+  } catch {
+    result = '';
+  }
+
+  result = safeImageUrl(result);
+  releaseArtworkCache.set(key, result);
+  return result;
+}
+
+function artworkUrlForRelease(release) {
+  const mode = ['auto', 'custom', 'graphic'].includes(release?.artworkMode) ? release.artworkMode : 'auto';
+  if (mode === 'graphic') return Promise.resolve('');
+  if (mode === 'custom') return Promise.resolve(safeImageUrl(release?.artworkUrl));
+  return automaticArtworkUrl(release);
+}
+
+function preloadImage(url, milliseconds = 5500) {
+  return new Promise(resolve => {
+    const clean = safeImageUrl(url);
+    if (!clean) { resolve(null); return; }
+    const image = new Image();
+    const timer = setTimeout(() => {
+      image.onload = null;
+      image.onerror = null;
+      resolve(null);
+    }, milliseconds);
+    image.onload = () => { clearTimeout(timer); resolve(image); };
+    image.onerror = () => { clearTimeout(timer); resolve(null); };
+    image.alt = '';
+    image.decoding = 'async';
+    image.loading = 'lazy';
+    image.src = clean;
+  });
+}
+
+async function enhanceReleaseArtwork(releases, renderVersion) {
+  await Promise.allSettled(releases.map(async (release, index) => {
+    const url = await artworkUrlForRelease(release);
+    if (!url || renderVersion !== releaseArtworkRenderVersion) return;
+
+    const image = await preloadImage(url);
+    if (!image || renderVersion !== releaseArtworkRenderVersion) return;
+
+    const art = document.querySelector(`[data-release-artwork="${index}"]`);
+    if (!art) return;
+    image.className = 'release-art-image';
+    art.prepend(image);
+    art.classList.add('has-release-image');
+  }));
+}
+
 function renderReleases() {
   const grid = document.getElementById('release-grid');
   if (!grid) return;
   const releases = Array.isArray(data.releases) ? data.releases : [];
+  const renderVersion = ++releaseArtworkRenderVersion;
 
-  grid.innerHTML = releases.map(release => {
+  grid.innerHTML = releases.map((release, index) => {
     const src = embedSrc(release.type, release.url);
     const releaseUrl = safeUrl(release.url);
     const downloadUrl = safeUrl(release.downloadUrl);
@@ -174,7 +284,7 @@ function renderReleases() {
 
     return `
       <article class="release-card">
-        ${makeArtwork(release)}
+        ${makeArtwork(release, index)}
         <div class="release-meta">
           <div class="release-topline"><span>${escapeHTML(release.number || '')}</span><span>${escapeHTML(platform)}</span></div>
           <h3>${escapeHTML(release.title || '')}</h3>
@@ -184,6 +294,9 @@ function renderReleases() {
         </div>
       </article>`;
   }).join('');
+
+  // Never await this: page content is already complete and usable.
+  enhanceReleaseArtwork(releases, renderVersion).catch(() => {});
 }
 
 function renderPlayers() {

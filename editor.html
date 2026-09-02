@@ -95,6 +95,7 @@
             </div>
             <button class="mini-button" id="add-release" type="button">+ Add release</button>
           </div>
+          <p class="section-help">Artwork defaults to <strong>Automatic from platform</strong>: SoundCloud track artwork, Mixcloud cover art or a YouTube thumbnail is tried after the release card is already rendered. If the lookup fails, the original Skank-E graphic stays visible. You can also use a custom image URL/file or force the Skank-E graphic.</p>
           <div id="release-editors" class="item-editors"></div>
         </section>
 
@@ -242,13 +243,21 @@
             <option value="youtube">YouTube</option>
           </select>
         </label>
-        <label class="field"><span>Artwork colour</span>
+        <label class="field"><span>Artwork source</span>
+          <select data-key="artworkMode">
+            <option value="auto">Automatic from platform</option>
+            <option value="custom">Custom image URL / file</option>
+            <option value="graphic">Skank-E graphic</option>
+          </select>
+        </label>
+        <label class="field"><span>Fallback graphic colour</span>
           <select data-key="artworkClass">
             <option value="artwork-a">Green / yellow</option>
             <option value="artwork-b">Yellow / orange</option>
             <option value="artwork-c">Orange / red</option>
           </select>
         </label>
+        <label class="field field-wide"><span>Custom artwork URL / file <small>used only with Custom source</small></span><input type="text" data-key="artworkUrl" placeholder="assets/artwork/cover.jpg or https://…" /></label>
         <label class="field field-wide"><span>Release / player URL</span><input type="url" data-key="url" placeholder="https://…" /></label>
         <label class="field field-wide"><span>Download URL <small>optional</small></span><input type="url" data-key="downloadUrl" placeholder="https://…" /></label>
       </div>

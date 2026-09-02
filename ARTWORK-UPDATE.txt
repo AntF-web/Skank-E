@@ -1,0 +1,21 @@
+SKANK-E RELEASE ARTWORK UPDATE
+===============================
+
+This version starts from the restored working site you uploaded.
+
+WHAT CHANGED
+- Release cards still render immediately with the original Skank-E graphic.
+- After the card exists, the site tries to load the real platform artwork:
+  * SoundCloud: track artwork via SoundCloud oEmbed metadata.
+  * Mixcloud: cover image via Mixcloud public metadata.
+  * YouTube: video thumbnail.
+- Any lookup/API/CORS/image error is caught and ignored. The Skank-E fallback stays visible.
+- No artwork lookup can stop Releases, Players, Dub Lab, Links or the editor from rendering.
+- The editor now offers Artwork source: Automatic / Custom image / Skank-E graphic.
+- Custom image can be a normal https:// URL or a local site path such as assets/artwork/my-cover.jpg.
+
+IMPORTANT
+If a platform blocks artwork metadata in the browser, Automatic may simply keep the fallback graphic.
+Use Custom image for a guaranteed cover in that case.
+
+Existing editor drafts are kept compatible: missing artworkMode defaults to Automatic.

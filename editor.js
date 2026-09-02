@@ -85,7 +85,9 @@
 
     return {
       site: { ...(baseData.site || {}), ...(input.site || {}) },
-      releases: Array.isArray(input.releases) ? input.releases : [],
+      releases: Array.isArray(input.releases)
+        ? input.releases.map(release => ({ artworkMode: 'auto', artworkUrl: '', ...release }))
+        : [],
       players: Array.isArray(input.players) ? input.players : [],
       dubLab: {
         ...baseDub,
@@ -316,6 +318,8 @@
       type: 'soundcloud',
       url: '',
       downloadUrl: '',
+      artworkMode: 'auto',
+      artworkUrl: '',
       artworkClass: ['artwork-a', 'artwork-b', 'artwork-c'][(n - 1) % 3],
       label: 'DUBPLATE'
     };

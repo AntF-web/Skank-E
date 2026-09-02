@@ -21,6 +21,8 @@ window.SKANK_E_DATA = {
       "type": "soundcloud",
       "url": "https://soundcloud.com/skank-e/make-your-body-movin-comfortable",
       "downloadUrl": "",
+      "artworkMode": "auto",
+      "artworkUrl": "",
       "artworkClass": "artwork-a",
       "label": "MASHUP"
     },
@@ -31,6 +33,8 @@ window.SKANK_E_DATA = {
       "type": "soundcloud",
       "url": "https://soundcloud.com/skank-e/dont-touch-it-away",
       "downloadUrl": "",
+      "artworkMode": "auto",
+      "artworkUrl": "",
       "artworkClass": "artwork-b",
       "label": "MASHUP"
     },
@@ -41,6 +45,8 @@ window.SKANK_E_DATA = {
       "type": "soundcloud",
       "url": "https://soundcloud.com/skank-e/genius-of-breath",
       "downloadUrl": "",
+      "artworkMode": "auto",
+      "artworkUrl": "",
       "artworkClass": "artwork-c",
       "label": "MASHUP"
     }
