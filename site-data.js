@@ -49,6 +49,18 @@ window.SKANK_E_DATA = {
       "downloadUrl": "",
       "artworkClass": "artwork-c",
       "label": "MASHUP"
+    },
+    {
+      "number": "004",
+      "title": "PON FUNKY KINGSTON",
+      "subtitle": "Toots & The Maytals vs Rihanna",
+      "type": "tiktok",
+      "url": "https://www.tiktok.com/@skank_e_84/video/7428250729946582304",
+      "downloadUrl": "",
+      "artworkMode": "auto",
+      "artworkUrl": "",
+      "artworkClass": "artwork-a",
+      "label": "MASHUP"
     }
   ],
   "players": [
