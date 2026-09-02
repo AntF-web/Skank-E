@@ -49,7 +49,7 @@ window.SKANK_E_DATA = {
     {
       "type": "soundcloud",
       "label": "SOUNDCLOUD",
-      "url": ""
+      "url": "https://soundcloud.com/skank-e"
     },
     {
       "type": "mixcloud",
