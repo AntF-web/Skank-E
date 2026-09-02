@@ -1,0 +1,18 @@
+TIKTOK RELEASE SUPPORT
+======================
+
+The private editor now includes TikTok in the Release > Platform menu.
+
+For best results paste the full TikTok post URL, for example:
+https://www.tiktok.com/@username/video/1234567890123456789
+
+Standard video/photo post URLs get an official TikTok embedded player.
+The release card also links directly to TikTok.
+
+Automatic artwork tries TikTok's oEmbed thumbnail. If that lookup fails,
+the existing Skank-E graphic remains visible. You can always choose
+Custom image URL / file and use assets/artwork/your-cover.jpg instead.
+
+Short redirect URLs such as vm.tiktok.com may still open correctly, but
+the website may not be able to derive an embed ID from them. Prefer the
+full www.tiktok.com/@.../video/... URL.

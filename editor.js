@@ -396,7 +396,7 @@
   }
 
   function platformName(type) {
-    return ({ soundcloud: 'SoundCloud', mixcloud: 'Mixcloud', youtube: 'YouTube' })[type] || type || 'Player';
+    return ({ soundcloud: 'SoundCloud', mixcloud: 'Mixcloud', youtube: 'YouTube', tiktok: 'TikTok' })[type] || type || 'Player';
   }
 
   function tuningFields(engine, params) {

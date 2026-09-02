@@ -742,3 +742,11 @@ button:focus-visible {
 @media (max-width: 650px) {
   .fx-controls { grid-template-columns: 1fr; }
 }
+
+
+/* TikTok release embeds use the official vertical player. */
+.release-mini-player.tiktok {
+  height: auto;
+  aspect-ratio: 9 / 16;
+  min-height: 0;
+}

@@ -119,6 +119,17 @@ function mixcloudPath(url) {
   }
 }
 
+function tiktokId(url) {
+  if (!url) return '';
+  try {
+    const u = new URL(url);
+    const match = u.pathname.match(/\/(?:video|photo)\/(\d+)/i);
+    return match ? match[1] : '';
+  } catch {
+    return '';
+  }
+}
+
 function embedSrc(type, url) {
   const clean = safeUrl(url);
   if (!clean || !/^https?:/i.test(clean)) return '';
@@ -133,11 +144,15 @@ function embedSrc(type, url) {
     const id = youtubeId(clean);
     return id ? `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?rel=0&modestbranding=1` : '';
   }
+  if (type === 'tiktok') {
+    const id = tiktokId(clean);
+    return id ? `https://www.tiktok.com/player/v1/${encodeURIComponent(id)}?autoplay=0&controls=1&music_info=1&description=0&rel=0` : '';
+  }
   return '';
 }
 
 function platformLabel(type = '') {
-  return ({ soundcloud: 'SOUNDCLOUD', mixcloud: 'MIXCLOUD', youtube: 'YOUTUBE' })[type] || String(type).toUpperCase();
+  return ({ soundcloud: 'SOUNDCLOUD', mixcloud: 'MIXCLOUD', youtube: 'YOUTUBE', tiktok: 'TIKTOK' })[type] || String(type).toUpperCase();
 }
 
 function artworkClass(value) {
@@ -211,6 +226,10 @@ async function automaticArtworkUrl(release) {
         const payload = await withFetchTimeout(`https://api.mixcloud.com${path}`);
         result = safeImageUrl(payload?.pictures?.extra_large || payload?.pictures?.large || payload?.pictures?.medium || payload?.picture || '');
       }
+    } else if (type === 'tiktok') {
+      const endpoint = `https://www.tiktok.com/oembed?url=${encodeURIComponent(releaseUrl)}`;
+      const payload = await withFetchTimeout(endpoint);
+      result = safeImageUrl(payload?.thumbnail_url || '');
     }
   } catch {
     result = '';
