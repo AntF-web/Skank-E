@@ -16,7 +16,7 @@ window.SKANK_E_DATA = {
   "releases": [
     {
       "artworkMode": "custom",
-      "artworkUrl": "assets\\artwork\\BodyMovinComfotable.jpg",
+      "artworkUrl": "assets/artwork/BodyMovinComfotable.jpg",
       "number": "001",
       "title": "MAKE YOUR BODY MOVIN' COMFORTABLE",
       "subtitle": "Los Caballeros Orchestra vs Beastie Boys",
@@ -28,7 +28,7 @@ window.SKANK_E_DATA = {
     },
     {
       "artworkMode": "custom",
-      "artworkUrl": "assets\\artwork\\TouchItAway.jpg",
+      "artworkUrl": "assets/artwork/TouchItAway.jpg",
       "number": "002",
       "title": "DON'T TOUCH IT AWAY",
       "subtitle": "Phyllis Dillon vs Busta Rhymes",
@@ -40,7 +40,7 @@ window.SKANK_E_DATA = {
     },
     {
       "artworkMode": "custom",
-      "artworkUrl": "assets\\artwork\\Q-Tip_TomTomClub.jpg",
+      "artworkUrl": "assets/artwork/Q-Tip_TomTomClub.jpg",
       "number": "003",
       "title": "GENIUS OF BREATH",
       "subtitle": "Tom Tom Club vs Q-Tip",
