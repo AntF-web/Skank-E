@@ -125,19 +125,15 @@ window.SKANK_E_DATA = {
   "links": [
     {
       "label": "SoundCloud",
-      "url": ""
+      "url": "https://soundcloud.com/skank-e"
     },
     {
       "label": "Mixcloud",
       "url": ""
     },
     {
-      "label": "YouTube",
-      "url": ""
-    },
-    {
-      "label": "Instagram",
-      "url": ""
+      "label": "TikTok",
+      "url": "https://www.tiktok.com/@skank_e_84/"
     },
     {
       "label": "Booking email",
