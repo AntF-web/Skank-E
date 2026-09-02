@@ -1,0 +1,75 @@
+SKANK-E EDITOR — GITHUB PAGES + LOCAL GUIDE
+=============================================
+
+WHY THE OLD GITHUB VERSION DID NOT UPDATE
+-----------------------------------------
+The previous editor was intentionally local-only. On a normal public host it
+stopped itself, and even locally it only downloaded a new site-data.js file.
+A static GitHub Pages website cannot write to its own repository by itself.
+
+This version fixes that by adding an optional “Publish to GitHub” action.
+
+EDIT ONLINE ON GITHUB PAGES
+---------------------------
+1. Open yoursite.github.io/.../editor.html
+2. Edit the site. The preview updates immediately.
+3. Scroll to “Publish to GitHub”.
+4. Check Owner, Repository, Branch and Content file path.
+   - Normal github.io URLs are auto-detected.
+   - The usual branch is main, but use the branch that actually publishes your site.
+5. Paste a FINE-GRAINED GitHub personal access token.
+6. Click “Publish changes to GitHub”.
+7. GitHub Pages may need a short moment to redeploy. Refresh the public site.
+
+TOKEN PERMISSIONS
+-----------------
+Create a fine-grained token limited to ONLY the website repository and give it:
+- Repository permissions → Contents: Read and write
+
+Do not put the token into editor.js, site-data.js, HTML, a Git commit, or any
+public repository file. This editor keeps the token only in memory for the
+current browser tab and never stores it in localStorage.
+
+IMPORTANT PRIVACY NOTE
+----------------------
+GitHub Pages is static hosting. If editor.html is deployed there, the editor
+interface itself is not truly private: anyone who knows the URL can open it.
+However, opening the editor does NOT give someone permission to publish. A
+valid GitHub token with repository access is still required.
+
+For a truly private online CMS, use an authenticated backend/service. For this
+simple static site, the scoped-token method keeps publishing permission under
+your control without adding a backend.
+
+LOCAL EDITING
+-------------
+You can still double-click editor.html, or run:
+  python -m http.server 8000
+then visit:
+  http://localhost:8000/editor.html
+
+Local edits auto-save to this browser. You can download site-data.js and commit
+it manually if you prefer not to use the GitHub API.
+
+WHAT THE EDITOR CONTROLS
+------------------------
+- Main site text
+- Releases (add / remove / reorder)
+- SoundCloud / Mixcloud / YouTube URLs
+- Dub Lab text and FX order
+- Built-in Dub Lab sound parameters
+- Custom Dub Lab MP3 / WAV / OGG paths
+- Social links, including TikTok
+- Booking email
+
+CUSTOM DUB LAB AUDIO
+--------------------
+The editor can point at an uploaded audio file, but it does not currently upload
+that binary file through GitHub. Put custom files in assets/sounds/ in the repo,
+then use a path such as:
+  assets/sounds/my-siren.mp3
+
+BACKUP
+------
+Use “Download site-data.js” or “Download JSON backup” whenever you want a local
+copy of the current editor state.
