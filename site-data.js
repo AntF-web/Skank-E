@@ -15,38 +15,38 @@ window.SKANK_E_DATA = {
   },
   "releases": [
     {
+      "artworkMode": "custom",
+      "artworkUrl": "assets\\artwork\\BodyMovinComfotable.jpg",
       "number": "001",
       "title": "MAKE YOUR BODY MOVIN' COMFORTABLE",
       "subtitle": "Los Caballeros Orchestra vs Beastie Boys",
       "type": "soundcloud",
       "url": "https://soundcloud.com/skank-e/make-your-body-movin-comfortable",
       "downloadUrl": "",
-      "artworkMode": "auto",
-      "artworkUrl": "",
       "artworkClass": "artwork-a",
       "label": "MASHUP"
     },
     {
+      "artworkMode": "custom",
+      "artworkUrl": "assets\\artwork\\TouchItAway.jpg",
       "number": "002",
       "title": "DON'T TOUCH IT AWAY",
       "subtitle": "Phyllis Dillon vs Busta Rhymes",
       "type": "soundcloud",
       "url": "https://soundcloud.com/skank-e/dont-touch-it-away",
       "downloadUrl": "",
-      "artworkMode": "auto",
-      "artworkUrl": "",
       "artworkClass": "artwork-b",
       "label": "MASHUP"
     },
     {
+      "artworkMode": "auto",
+      "artworkUrl": "assets\\artwork\\Q-Tip_TomTomClub.jpg",
       "number": "003",
       "title": "GENIUS OF BREATH",
       "subtitle": "Tom Tom Club vs Q-Tip",
       "type": "soundcloud",
       "url": "https://soundcloud.com/skank-e/genius-of-breath",
       "downloadUrl": "",
-      "artworkMode": "auto",
-      "artworkUrl": "",
       "artworkClass": "artwork-c",
       "label": "MASHUP"
     }
