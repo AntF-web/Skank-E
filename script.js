@@ -228,23 +228,52 @@ function artworkUrlForRelease(release) {
   return automaticArtworkUrl(release);
 }
 
-function preloadImage(url, milliseconds = 5500) {
-  return new Promise(resolve => {
-    const clean = safeImageUrl(url);
-    if (!clean) { resolve(null); return; }
-    const image = new Image();
-    const timer = setTimeout(() => {
-      image.onload = null;
-      image.onerror = null;
-      resolve(null);
-    }, milliseconds);
-    image.onload = () => { clearTimeout(timer); resolve(image); };
-    image.onerror = () => { clearTimeout(timer); resolve(null); };
-    image.alt = '';
-    image.decoding = 'async';
-    image.loading = 'lazy';
-    image.src = clean;
-  });
+function resolveArtworkSrc(value = '') {
+  let clean = safeImageUrl(value);
+  if (!clean) return '';
+
+  // Be forgiving with paths pasted from Windows and with leading slashes.
+  // Local artwork should stay relative to the current GitHub Pages project.
+  clean = clean.replace(/\\/g, '/');
+  if (/^https?:\/\//i.test(clean)) return clean;
+  clean = clean.replace(/^\/+/, '').replace(/^\.\//, '');
+
+  try {
+    return new URL(clean, document.baseURI).href;
+  } catch {
+    return clean;
+  }
+}
+
+function attachArtworkImage(art, url, renderVersion) {
+  const src = resolveArtworkSrc(url);
+  if (!art || !src) return;
+
+  // Attach the image to the DOM immediately and reveal it only after a
+  // successful load. This is more reliable than preloading a detached image
+  // (especially when lazy-loading is involved) and keeps the graphic fallback
+  // visible if the file path is wrong or the remote image fails.
+  const image = new Image();
+  image.className = 'release-art-image';
+  image.alt = '';
+  image.decoding = 'async';
+  image.loading = 'eager';
+
+  image.addEventListener('load', () => {
+    if (renderVersion !== releaseArtworkRenderVersion || !art.isConnected) {
+      image.remove();
+      return;
+    }
+    art.classList.add('has-release-image');
+  }, { once: true });
+
+  image.addEventListener('error', () => {
+    image.remove();
+    art.classList.remove('has-release-image');
+  }, { once: true });
+
+  art.prepend(image);
+  image.src = src;
 }
 
 async function enhanceReleaseArtwork(releases, renderVersion) {
@@ -252,14 +281,9 @@ async function enhanceReleaseArtwork(releases, renderVersion) {
     const url = await artworkUrlForRelease(release);
     if (!url || renderVersion !== releaseArtworkRenderVersion) return;
 
-    const image = await preloadImage(url);
-    if (!image || renderVersion !== releaseArtworkRenderVersion) return;
-
     const art = document.querySelector(`[data-release-artwork="${index}"]`);
     if (!art) return;
-    image.className = 'release-art-image';
-    art.prepend(image);
-    art.classList.add('has-release-image');
+    attachArtworkImage(art, url, renderVersion);
   }));
 }
 
