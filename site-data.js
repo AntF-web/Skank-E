@@ -132,8 +132,8 @@ window.SKANK_E_DATA = {
       "url": ""
     },
     {
-      "label": "YouTube",
-      "url": ""
+      "label": "TikTok",
+      "url": "https://www.tiktok.com/@skank_e_84"
     },
     {
       "label": "Booking email",
