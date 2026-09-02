@@ -16,23 +16,23 @@ window.SKANK_E_DATA = {
   "releases": [
     {
       "number": "001",
-      "title": "ADD YOUR FIRST BOOTLEG",
-      "subtitle": "Reggae vocal × funk break × hip-hop pressure",
+      "title": "MAKE YOUR BODY MOVIN' COMFORTABLE",
+      "subtitle": "Los Caballeros Orchestra vs Beastie Boys",
       "type": "soundcloud",
-      "url": "",
+      "url": "https://soundcloud.com/skank-e/make-your-body-movin-comfortable",
       "downloadUrl": "",
       "artworkClass": "artwork-a",
-      "label": "DUBPLATE"
+      "label": "MASHUP"
     },
     {
       "number": "002",
-      "title": "ADD YOUR SECOND MASHUP",
-      "subtitle": "Funk 45 × heavyweight bass × party edit",
-      "type": "mixcloud",
-      "url": "",
+      "title": "DON'T TOUCH IT AWAY",
+      "subtitle": "Phyllis Dillon vs Busta Rhymes",
+      "type": "soundcloud",
+      "url": "https://soundcloud.com/skank-e/dont-touch-it-away",
       "downloadUrl": "",
       "artworkClass": "artwork-b",
-      "label": "BOOTLEG"
+      "label": "MASHUP"
     },
     {
       "number": "003",
@@ -132,8 +132,8 @@ window.SKANK_E_DATA = {
       "url": ""
     },
     {
-      "label": "TikTok",
-      "url": "https://www.tiktok.com/@skank_e_84/"
+      "label": "YouTube",
+      "url": ""
     },
     {
       "label": "Booking email",
