@@ -1,0 +1,28 @@
+SKANK-E CUSTOM ARTWORK FIX
+==========================
+
+What was wrong
+--------------
+The site tried to preload release artwork in a detached Image object that was
+also marked for lazy loading. Some browsers can defer that image indefinitely,
+so the success callback never ran and the fallback Skank-E graphic remained.
+
+What changed
+------------
+- Artwork images are now attached to the release card immediately.
+- They stay invisible until they load successfully.
+- If loading fails, the image is removed and the original graphic remains.
+- Windows backslashes are converted to forward slashes automatically.
+- Relative paths are resolved against the current GitHub Pages project path.
+
+Your current files were checked and are valid JPEG images:
+- assets/artwork/BodyMovinComfotable.jpg (1200 x 685)
+- assets/artwork/TouchItAway.jpg (1200 x 699)
+- assets/artwork/Q-Tip_TomTomClub.jpg (617 x 351)
+
+Use paths like:
+assets/artwork/TouchItAway.jpg
+
+No special image size is required. JPG, PNG and WebP are all suitable.
+Square artwork is recommended visually, but landscape images are cropped with
+object-fit: cover.
