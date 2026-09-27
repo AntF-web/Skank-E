@@ -60,12 +60,12 @@ window.SKANK_E_DATA = {
     {
       "type": "mixcloud",
       "label": "MIXCLOUD",
-      "url": ""
+      "url": "https://www.mixcloud.com/skank-e/"
     },
     {
       "type": "youtube",
       "label": "YOUTUBE",
-      "url": ""
+      "url": "https://www.youtube.com/@Skank-E"
     }
   ],
   "dubLab": {
