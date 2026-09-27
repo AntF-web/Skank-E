@@ -65,7 +65,7 @@ window.SKANK_E_DATA = {
     {
       "type": "youtube",
       "label": "YOUTUBE",
-      "url": "https://www.youtube.com/@Skank-E"
+      "url": "https://www.youtube.com/watch?v=XgZh3rOX12g"
     }
   ],
   "dubLab": {
