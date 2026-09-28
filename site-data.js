@@ -71,7 +71,7 @@ window.SKANK_E_DATA = {
   "dubLab": {
     "eyebrow": "LIVE FX / NO AUTOPLAY",
     "title": "Make some\nnoise.",
-    "description": "Tap the controls for a little sound-system theatre. Use the built-in synth sounds or point any button at your own MP3, WAV or OGG file.",
+    "description": "",
     "armedStatus": "FX armed. Click a button to fire.",
     "rigLabel": "SKANK-E MOBILE SOUND",
     "effects": [
@@ -82,14 +82,14 @@ window.SKANK_E_DATA = {
         "engine": "siren",
         "audioUrl": "",
         "params": {
-          "waveform": "sawtooth",
-          "startFrequency": 440,
-          "peakFrequency": 880,
-          "endFrequency": 520,
-          "peakTime": 3.45,
+          "waveform": "sine",
+          "startFrequency": 880,
+          "peakFrequency": 480,
+          "endFrequency": 220,
+          "peakTime": 0.71,
           "duration": 5,
-          "filterFrequency": 2200,
-          "volume": 0.12,
+          "filterFrequency": 1450,
+          "volume": 0.24,
           "audioVolume": 0.8,
           "playbackRate": 1
         }
@@ -104,8 +104,8 @@ window.SKANK_E_DATA = {
           "burstDuration": 0.09,
           "filterFrequency": 850,
           "delayTime": 0.22,
-          "feedback": 1,
-          "volume": 0.18,
+          "feedback": 0.7,
+          "volume": 0.24,
           "audioVolume": 0.8,
           "playbackRate": 1
         }
@@ -121,7 +121,7 @@ window.SKANK_E_DATA = {
           "frequencySpread": 57,
           "decay": 0.24,
           "taps": 7,
-          "volume": 0.05,
+          "volume": 0.24,
           "audioVolume": 0.8,
           "playbackRate": 1
         }
